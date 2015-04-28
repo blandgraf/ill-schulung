@@ -1,0 +1,272 @@
+<!-- Alfresco 5.0.c share-config-custom.xml sample -->
+<alfresco-config>
+
+	<!-- Global config section -->
+	<config replace="true">
+		<flags>
+			<!-- Developer debugging setting to turn on DEBUG mode for client scripts 
+				in the browser -->
+			<client-debug>false</client-debug>
+
+			<!-- LOGGING can always be toggled at runtime when in DEBUG mode (Ctrl, 
+				Ctrl, Shift, Shift). This flag automatically activates logging on page load. -->
+			<client-debug-autologging>false</client-debug-autologging>
+		</flags>
+	</config>
+
+	<config evaluator="string-compare" condition="WebFramework">
+		<web-framework>
+			<!-- SpringSurf Autowire Runtime Settings -->
+			<!-- Developers can set mode to 'development' to disable; SpringSurf caches, 
+				FreeMarker template caching and Rhino JavaScript compilation. -->
+			<autowire>
+				<!-- Pick the mode: "production" or "development" -->
+				<mode>production</mode>
+			</autowire>
+
+			<!-- Allows extension modules with <auto-deploy> set to true to be automatically 
+				deployed -->
+			<module-deployment>
+				<mode>manual</mode>
+				<enable-auto-deploy-modules>true</enable-auto-deploy-modules>
+			</module-deployment>
+		</web-framework>
+	</config>
+
+	<config evaluator="string-compare" condition="DocumentLibrary">
+
+		<!-- Define which types can be specialized to which types -->
+		<types>
+			<type name="cm:folder">
+				<subtype name="ill:materialFolder" />
+				<subtype name="ill:deliveryFolder" />
+			</type>
+		</types>
+
+		<create-content>
+			<content id="folder" label="create-content.materialFolder"
+				icon="folder" index="7" type="javascript">
+				<param name="function">onNewMaterialFolder</param>
+			</content>
+			<content id="folder" label="create-content.deliveryFolder"
+				icon="folder" index="7" type="javascript">
+				<param name="function">onNewDeliveryFolder</param>
+			</content>
+		</create-content>
+
+	</config>
+
+	<!-- Custom Code Dependencies -->
+	<config evaluator="string-compare" condition="DocLibCustom">
+		<dependencies>
+			<js src="js/toolbarExtension.js" />
+			<js src="js/customActions.js" />
+		</dependencies>
+	</config>
+
+	<!-- existing nodes -->
+	<config evaluator="node-type" condition="ill:materialFolder">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="cm:name" />
+					<show id="cm:title" />
+					<show id="cm:description" />
+					<show id="cm:tags" />
+					<show id="ill:meId" />
+					<show id="ill:externalReference" />
+					<show id="ill:handoverDate" />
+					<show id="ill:shipmentDate" />
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+
+	<!-- Create and search forms -->
+	<config evaluator="model-type" condition="ill:materialFolder">
+		<forms>
+			<!-- Document Library Common form -->
+			<form id="doclib-common">
+				<field-visibility>
+					<show id="cm:name" />
+					<show id="cm:title" force="true" />
+					<show id="cm:description" force="true" />
+					<show id="ill:meId" />
+					<show id="ill:externalReference" force="true" />
+					<show id="ill:handoverDate" />
+					<show id="ill:shipmentDate" />
+				</field-visibility>
+				<create-form template="../documentlibrary/forms/doclib-common.ftl" />
+				<appearance>
+					<field id="cm:name">
+						<control template="/org/alfresco/components/form/controls/textfield.ftl">
+							<control-param name="maxLength">255</control-param>
+						</control>
+					</field>
+					<field id="cm:title">
+						<control template="/org/alfresco/components/form/controls/textfield.ftl" />
+					</field>
+				</appearance>
+			</form>
+			<form id="search">
+				<field-visibility>
+					<show id="cm:name" />
+					<show id="cm:title" force="true" />
+					<show id="cm:description" force="true" />
+					<show id="ill:meId" />
+					<show id="ill:externalReference" force="true" />
+					<show id="ill:handoverDate" />
+					<show id="ill:shipmentDate" />
+				</field-visibility>
+				<appearance>
+					<field id="ill:handoverDate">
+						<control template="/org/alfresco/components/form/controls/daterange.ftl" />
+					</field>
+					<field id="ill:shipmentDate">
+						<control template="/org/alfresco/components/form/controls/daterange.ftl" />
+					</field>
+				</appearance>
+			</form>
+		</forms>
+	</config>
+
+	<!-- existing nodes -->
+	<config evaluator="node-type" condition="ill:deliveryFolder">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="cm:name" />
+					<show id="cm:title" />
+					<show id="cm:description" />
+					<show id="cm:tags" />
+					<show id="ill:orderNumber" />
+					<show id="ill:externalReference" />
+					<show id="ill:pickupDate" />
+					<show id="ill:transportMode" />
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+
+	<!-- Create and search forms -->
+	<config evaluator="model-type" condition="ill:deliveryFolder">
+		<forms>
+			<!-- Document Library Common form -->
+			<form id="doclib-common">
+				<field-visibility>
+					<show id="cm:name" />
+					<show id="cm:title" force="true" />
+					<show id="cm:description" force="true" />
+					<show id="ill:orderNumber" />
+					<show id="ill:externalReference" force="true" />
+					<show id="ill:pickupDate" />
+					<show id="ill:transportMode" />
+				</field-visibility>
+				<create-form template="../documentlibrary/forms/doclib-common.ftl" />
+				<appearance>
+					<field id="cm:name">
+						<control template="/org/alfresco/components/form/controls/textfield.ftl">
+							<control-param name="maxLength">255</control-param>
+						</control>
+					</field>
+					<field id="cm:title">
+						<control template="/org/alfresco/components/form/controls/textfield.ftl" />
+					</field>
+				</appearance>
+			</form>
+			<!-- Document Library Common form -->
+			<form id="search">
+				<field-visibility>
+					<show id="cm:name" />
+					<show id="cm:title" force="true" />
+					<show id="cm:description" force="true" />
+					<show id="ill:orderNumber" />
+					<show id="ill:externalReference" force="true" />
+					<show id="ill:pickupDate" />
+					<show id="ill:transportMode" />
+				</field-visibility>
+				<appearance>
+					<field id="ill:pickupDate">
+						<control template="/org/alfresco/components/form/controls/daterange.ftl" />
+					</field>
+				</appearance>
+			</form>
+		</forms>
+	</config>
+
+	<!-- adjust cm:content advanced search form -->
+	<config evaluator="model-type" condition="cm:content">
+		<!-- Search form -->
+		<forms>
+			<form id="search">
+				<field-visibility>
+					<show id="cm:taggable" force="true" />
+					<show id="cm:categories" force="true" />
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+
+	<!-- adjust cm:folder advanced search form -->
+	<config evaluator="model-type" condition="cm:folder">
+		<!-- Search form -->
+		<forms>
+			<form id="search">
+				<field-visibility>
+					<show id="cm:taggable" force="true" />
+					<show id="cm:categories" force="true" />
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="string-compare" condition="AdvancedSearch">
+		<advanced-search>
+			<!-- Forms for the advanced search type list -->
+			<forms>
+				<form labelId="type.ill_materialFolder" descriptionId="type.ill_materialFolder.description">ill:materialFolder
+				</form>
+				<form labelId="type.ill_deliveryFolder" descriptionId="type.ill_deliveryFolder.description">ill:deliveryFolder
+				</form>
+			</forms>
+		</advanced-search>
+	</config>
+
+	<!-- Actions -->
+	<config evaluator="string-compare" condition="DocLibActions">
+		<actions>
+			<action id="move-up-1-level" type="javascript" icon="up">
+				<param name="function">onActionSimpleRepoAction</param>
+				<param name="action">move-up</param>
+				<param name="levels">1</param>
+				<param name="successMessage">Erfolg</param>
+				<param name="failureMessage">Fehler</param>
+				<permissions>
+					<permission allow="true">Write</permission>
+					<permission allow="true">Delete</permission>
+				</permissions>
+			</action>
+			<action id="move-up" type="javascript" icon="up">
+				<param name="function">onActionMoveUp</param>
+				<param name="successMessage">Erfolg</param>
+				<param name="failureMessage">Fehler</param>
+				<permissions>
+					<permission allow="true">Write</permission>
+					<permission allow="true">Delete</permission>
+				</permissions>
+			</action>
+
+		</actions>
+		<actionGroups>
+			<actionGroup id="document-browse">
+				<action index="265" id="move-up-1-level" label="1 Level hoch" />
+				<action index="266" id="move-up" label="Move up" />
+			</actionGroup>
+			<actionGroup id="document-details">
+				<action index="265" id="move-up-1-level" label="1 Level hoch" />
+				<action index="266" id="move-up" label="Move up" />
+			</actionGroup>
+		</actionGroups>
+	</config>
+
+</alfresco-config>
