@@ -1,0 +1,100 @@
+<model xmlns="http://www.alfresco.org/model/dictionary/1.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="ill:model">
+	<description>Content Model for ILL</description>
+	<author>ILL</author>
+	<published>2015-04-27</published>
+	<version>1.0</version>
+	<imports>
+		<!-- Import Alfresco Dictionary Definitions -->
+		<import uri="http://www.alfresco.org/model/dictionary/1.0"
+			prefix="d" />
+		<!-- Import Alfresco Content Domain Model Definitions -->
+		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm" />
+	</imports>
+	<namespaces>
+		<namespace uri="http://www.ill.co.at/alfresco/model" prefix="ill" />
+	</namespaces>
+
+	<!-- constraint for transport mode -->
+	<constraints>
+		<constraint name="ill:transportModeConstraint" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>LKW</value>
+					<value>Bahn</value>
+					<value>Schiff</value>
+				</list>
+			</parameter>
+		</constraint>
+	</constraints>
+
+	<types>
+		<!-- common root folder type -->
+		<type name="ill:illFolder">
+			<title>ILL Root Folder</title>
+			<parent>cm:folder</parent>
+		</type>
+
+		<!-- Materialakte -->
+		<type name="ill:materialFolder">
+			<title>Materialakt</title>
+			<parent>ill:illFolder</parent>
+			<properties>
+				<property name="ill:meId">
+					<title>ME-Id</title>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="ill:handoverDate">
+					<title>Übergabedatum</title>
+					<type>d:date</type>
+				</property>
+				<property name="ill:shipmentDate">
+					<title>Übergabedatum</title>
+					<type>d:date</type>
+				</property>
+			</properties>
+			<mandatory-aspects>
+				<aspect>ill:hasExternalReference</aspect>
+			</mandatory-aspects>
+		</type>
+
+		<!-- Versandakte -->
+		<type name="ill:deliveryFolder">
+			<title>Versandakt</title>
+			<parent>ill:illFolder</parent>
+			<properties>
+				<property name="ill:orderNumber">
+					<title>Versandauftragsnummer</title>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="ill:pickupDate">
+					<title>Abholdatum</title>
+					<type>d:date</type>
+				</property>
+				<property name="ill:transportMode">
+					<title>Transportmodus</title>
+					<type>d:text</type>
+					<constraints>
+						<constraint ref="ill:transportModeConstraint" />
+					</constraints>
+				</property>
+			</properties>
+			<mandatory-aspects>
+				<aspect>ill:hasExternalReference</aspect>
+			</mandatory-aspects>
+		</type>
+	</types>
+
+	<aspects>
+		<aspect name="ill:hasExternalReference">
+			<properties>
+				<property name="ill:externalReference">
+					<title>Fremdnummer kundenbezogen</title>
+					<type>d:text</type>
+				</property>
+			</properties>
+		</aspect>
+	</aspects>
+</model>

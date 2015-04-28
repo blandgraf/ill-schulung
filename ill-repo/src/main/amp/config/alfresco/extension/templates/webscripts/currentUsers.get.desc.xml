@@ -1,0 +1,7 @@
+<webscript>
+    <shortname>Javascript Sample Webscript</shortname>
+    <description>Hands back a greeting</description>
+    <url>/currentUsers</url>
+    <authentication>admin</authentication>
+    <format default="json"></format>
+</webscript>
